@@ -1,0 +1,370 @@
+---
+title: "SFA extract features Deng et al 2014"
+author: "Kushal K Dey"
+date: "June 17, 2016"
+output: 
+  html_document:
+    css: floating-toc.css
+    toc: true
+---
+```{r}
+library(knitr)
+source("../R/SFA.ExtractTopFeatures.R")
+```
+
+## Loading Deng et al 2014 
+
+```{r}
+library(devtools)
+
+read.data1 = function() {
+  x = tempfile()
+  download.file('https://cdn.rawgit.com/kkdey/singleCellRNASeqMouseDeng2014/master/data/Deng2014MouseEsc.rda', destfile=x, quiet=TRUE)
+  z = get(load((x)))
+  return(z)
+}
+
+Deng2014MouseESC <- read.data1()
+
+deng.counts <- Biobase::exprs(Deng2014MouseESC)
+deng.meta_data <- Biobase::pData(Deng2014MouseESC)
+deng.gene_names <- rownames(deng.counts)
+
+```
+
+## Load the SFA input (sparse loadings: sqrt transformation)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_lambda.out")
+f_out <- t(read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_F.out"))
+
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min")
+
+top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
+
+```
+
+## Factor Annotations 
+
+### Factor 1 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[1,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 2 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[2,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 3 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[3,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 4 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[4,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 5 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[5,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 6 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[6,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 7 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[7,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 8 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[8,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 9 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[9,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 10 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[10,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+
+## Load the SFA input (sparse loadings: voom transformation)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_lambda.out")
+f_out <- t(read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_F.out"))
+
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min")
+
+top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
+
+```
+
+## Factor Annotations
+
+### Factor 1 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[1,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 2 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[2,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 3 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[3,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 4 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[4,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 5 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[5,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 6 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[6,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 7 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[7,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 8 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[8,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 9 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[9,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 10 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[10,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+## Load the SFA input (sparse factors: sqrt transformation)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_transpose_lambda.out")
+f_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_transpose_F.out")
+
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min")
+
+top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
+
+```
+
+## Factor Annotations
+
+### Factor 1 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[1,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 2 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[2,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 3 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[3,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 4 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[4,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 5 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[5,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 6 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[6,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 7 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[7,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 8 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[8,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 9 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[9,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 10 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[10,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+## Load the SFA input (sparse factors: voom transformation)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_transpose_lambda.out")
+f_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_transpose_F.out")
+
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min")
+
+top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
+
+```
+
+## Factor Annotations
+
+### Factor 1 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[1,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 2 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[2,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 3 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[3,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 4 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[4,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 5 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[5,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 6 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[6,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 7 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[7,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 8 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[8,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 9 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[9,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
+
+### Factor 10 annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(top_gene_names[10,],  scopes="symbol", fields=c("name", "summary"), species="mouse");
+kable(as.data.frame(out))
+```
