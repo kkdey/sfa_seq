@@ -40,6 +40,9 @@ write.table(sqrt_deng_counts, file="../sfa_inputs/sqrt_deng_counts",
 #./sfa_mac -gen ../../sfa_inputs/sqrt_deng_counts -g 22431 -n 259 -k 10 -iter 50 -r 800 -mn -mg -t  -o ../../sfa_outputs/Deng2014/sqrt_deng_counts_transpose
 # ./sfa_linux -gen ../../sfa_inputs/sqrt_deng_counts -g 22431 -n 259 -k 10 -iter 100 -r 500 -mn -mg -t -o ../../sfa_outputs/Deng2014/sqrt_deng_counts_transpose
 
+#./sfa_mac -gen ../../sfa_inputs/sqrt_deng_counts -g 22431 -n 259 -k 10 -iter 50 -r 800 -mn -mg -t  -o ../../sfa_outputs/Deng2014/sqrt_deng_counts_transpose
+
+# SFAmix
 lambda_out <- read.table("../sfa_outputs/Deng2014/sqrt_deng_counts_transpose_lambda.out")
 f_out <- read.table("../sfa_outputs/Deng2014/sqrt_deng_counts_transpose_F.out")
 
