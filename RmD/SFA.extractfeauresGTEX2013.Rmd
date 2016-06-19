@@ -1,0 +1,972 @@
+---
+title: 'Gene Annotations from SFA: GTEx'
+author: "Kushal K Dey"
+date: "June 18, 2016"
+output: 
+  html_document:
+    css: floating-toc.css
+    toc: true
+---
+
+```{r packages, echo=FALSE, eval=TRUE, warning=FALSE, message=FALSE}
+library(maptpx)
+library(qtlcharts)
+library(data.table)
+library(mygene)
+library(CountClust)
+library(knitr)
+```
+
+```{r}
+library(knitr)
+source("../R/SFA.ExtractTopFeatures.R")
+```
+
+
+
+We perform gene annotations from the GTEx SFA analysis.
+
+## GTEx 2013 Factor analysis (sparse loadings: sqrt counts)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/GTEX2013/counts_sqrt_gtex/counts_sqrt_gtex_lambda.out");
+f_out <- t(read.table("../sfa_outputs/GTEX2013/counts_sqrt_gtex/counts_sqrt_gtex_F.out"));
+
+gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.txt")));
+gene_names <- substring(gene_names,1,15);
+xli  <-  gene_names;
+
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min", mult.annotate = TRUE)
+
+gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
+
+```
+
+### SFA loadings plot
+
+
+```{r}
+samples_id <- read.table("../sfa_inputs/samples_id.txt");
+
+tissue_labels <- vector("numeric", NROW(samples_id))
+tissue_labels <- samples_id[ ,3]
+
+tissue_levels <- unique(tissue_labels);
+
+
+cumsum_val <- c(1,cumsum(as.numeric(table(tissue_labels))))
+cumsum_low <- cumsum_val[1:(length(cumsum_val)-1)]
+cumsum_high <- cumsum_val[2:(length(cumsum_val))];
+cumsum_mean <- 0.5*(cumsum_low+cumsum_high)
+
+
+for(k in 1:20){
+png(paste0("../sfa_outputs/GTEX2013_transpose/sfa-figures/sqrt_counts_sparse_load_loadings/gtex_sfa_loadings_",k,".png"), width=4, height=4, units="in", res=600)
+par(mar=c(6,3,1,1))
+par(mar=c(10,3,2,2))
+barplot(lambda_out[,k], axisnames=F,space=0,border=NA,
+        main=paste0("SFA on gtex expression: loading:", k),
+        las=1, cex.axis=0.3,cex.main=0.4,
+        ylim=c(min(lambda_out[,k]),max(lambda_out[,k])))
+axis(1,at=cumsum_mean,unique(tissue_labels),las=2, cex.axis=0.3);
+abline(v=cumsum_high)
+dev.off()
+}
+
+```
+
+### Factor 1 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[1,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",1,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+
+### Factor 2 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[2,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",2,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 3 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[3,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",3,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 4 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[4,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",4,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 5 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[5,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",5,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 6 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[6,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",6,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 7 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[7,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",7,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 8 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[8,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",8,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 9 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[9,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",9,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 10 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[10,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",10,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 11 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[11,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",11,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 12 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[12,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",12,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 13 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[13,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",13,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 14 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[14,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",14,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 15 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[15,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",15,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 16 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[16,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",16,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 17 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[17,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",17,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 18 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[18,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",18,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 19 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[19,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",19,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 20 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[20,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_sqrt/gene_names_clus_",20,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+## GTEx 2013 Factor analysis (sparse loadings: voom counts)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/GTEX2013/voom_gtex/voom_gtex_sfa_lambda.out");
+f_out <- t(read.table("../sfa_outputs/GTEX2013/voom_gtex/voom_gtex_sfa_F.out"));
+
+gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.txt")));
+gene_names <- substring(gene_names,1,15);
+xli  <-  gene_names;
+
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min", mult.annotate = TRUE)
+
+gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
+
+```
+
+### SFA loadings plot
+
+
+```{r}
+
+samples_id <- read.table("../sfa_inputs/samples_id.txt");
+
+tissue_labels <- vector("numeric", NROW(samples_id))
+tissue_labels <- samples_id[ ,3]
+
+tissue_levels <- unique(tissue_labels);
+
+
+cumsum_val <- c(1,cumsum(as.numeric(table(tissue_labels))))
+cumsum_low <- cumsum_val[1:(length(cumsum_val)-1)]
+cumsum_high <- cumsum_val[2:(length(cumsum_val))];
+cumsum_mean <- 0.5*(cumsum_low+cumsum_high)
+
+for(k in 1:20){
+png(paste0("../sfa_outputs/GTEX2013_transpose/sfa-figures/voom_sparse_load_loadings/gtex_sfa_loadings_",k,".png"), width=4, height=4, units="in", res=600)
+par(mar=c(6,3,1,1))
+par(mar=c(10,3,2,2))
+barplot(lambda_out[,k], axisnames=F,space=0,border=NA,
+        main=paste0("SFA on gtex expression: loading:", k),
+        las=1, cex.axis=0.3,cex.main=0.4,
+        ylim=c(min(lambda_out[,k]),max(lambda_out[,k])))
+axis(1,at=cumsum_mean,unique(tissue_labels),las=2, cex.axis=0.3);
+abline(v=cumsum_high)
+dev.off()
+}
+
+```
+
+### Factor 1 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[1,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",1,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 2 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[2,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",2,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 3 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[3,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",3,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 4 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[4,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",4,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 5 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[5,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",5,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 6 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[6,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",6,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 7 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[7,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",7,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 8 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[8,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",8,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 9 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[9,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",9,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 10 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[10,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",10,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 11 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[11,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",11,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 12 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[12,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",12,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 13 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[13,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",13,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 14 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[14,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",14,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 15 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[15,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",15,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 16 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[16,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",16,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 17 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[17,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",17,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 18 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[18,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",18,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 19 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[19,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",19,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 20 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[20,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_load_voom/gene_names_clus_",20,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+
+Transpose the matrix to ensure sparse factors 
+
+```{r echo=TRUE, eval=FALSE}
+
+##  Voom counts transpose
+
+#Expected complete Log likelihood at iteration 100: -8.18694e+07
+#Marginal log likelihood at iteration 100: inf
+#Residual variance at iteration 100: 1.72648
+#Residual sum of squares at iteration 100: 6.53386e+07
+
+##  Sqrt counts transpose
+
+# Expected complete Log likelihood at iteration 100: -3.9495e+08
+# Marginal log likelihood at iteration 100: -inf
+# Residual variance at iteration 100: 638.648
+# Residual sum of squares at iteration 100: 2.35575e+10
+
+## counts transpose
+
+```
+
+
+
+## GTEx 2013 Factor analysis (sparse factors: sqrt counts)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/GTEX2013_transpose/sqrt_counts_gtex/gtex_sqrt_counts_transpose_lambda.out");
+f_out <- read.table("../sfa_outputs/GTEX2013_transpose/sqrt_counts_gtex/gtex_sqrt_counts_transpose_F.out");
+
+gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.txt")));
+gene_names <- substring(gene_names,1,15);
+xli  <-  gene_names;
+
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min", mult.annotate = TRUE)
+
+gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
+
+```
+
+### SFA loadings plot
+
+
+```{r}
+
+samples_id <- read.table("../sfa_inputs/samples_id.txt");
+
+tissue_labels <- vector("numeric", NROW(samples_id))
+tissue_labels <- samples_id[ ,3]
+
+tissue_levels <- unique(tissue_labels);
+
+
+cumsum_val <- c(1,cumsum(as.numeric(table(tissue_labels))))
+cumsum_low <- cumsum_val[1:(length(cumsum_val)-1)]
+cumsum_high <- cumsum_val[2:(length(cumsum_val))];
+cumsum_mean <- 0.5*(cumsum_low+cumsum_high)
+
+for(k in 1:20){
+png(paste0("../sfa_outputs/GTEX2013_transpose/sfa-figures/sqrt_counts_sparse_fac_loadings/gtex_sfa_loadings_",k,".png"), width=4, height=4, units="in", res=600)
+par(mar=c(6,3,1,1))
+par(mar=c(10,3,2,2))
+barplot(t(f_out)[,k], axisnames=F,space=0,border=NA,
+        main=paste0("SFA on gtex expression: loading:", k),
+        las=1, cex.axis=0.3,cex.main=0.4,
+        ylim=c(min(f_out[k,]),max(f_out[k,])))
+axis(1,at=cumsum_mean,unique(tissue_labels),las=2, cex.axis=0.3);
+abline(v=cumsum_high)
+dev.off()
+}
+
+```
+
+
+### Factor 1 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[1,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",1,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 2 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[2,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",2,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 3 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[3,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",3,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 4 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[4,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",4,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 5 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[5,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",5,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 6 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[6,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",6,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 7 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[7,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",7,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 8 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[8,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",8,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 9 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[9,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",9,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 10 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[10,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",10,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 11 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[11,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",11,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 12 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[12,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",12,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 13 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[13,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",13,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 14 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[14,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",14,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 15 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[15,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",15,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 16 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[16,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",16,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 17 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[17,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",17,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 18 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[18,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",18,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 19 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[19,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",19,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 20 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[20,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_sqrt/gene_names_clus_",20,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+## GTEx 2013 Factor analysis (sparse factors: voom counts)
+
+```{r}
+lambda_out <- read.table("../sfa_outputs/GTEX2013_transpose/voom_gtex/gtex_voom_transpose_lambda.out");
+f_out <- read.table("../sfa_outputs/GTEX2013_transpose/voom_gtex/gtex_voom_transpose_F.out");
+
+gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.txt")));
+gene_names <- substring(gene_names,1,15);
+xli  <-  gene_names;
+
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min", mult.annotate = TRUE)
+
+gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
+
+```
+
+### SFA loadings plot
+
+
+```{r}
+samples_id <- read.table("../sfa_inputs/samples_id.txt");
+
+tissue_labels <- vector("numeric", NROW(samples_id))
+tissue_labels <- samples_id[ ,3]
+
+tissue_levels <- unique(tissue_labels);
+
+
+cumsum_val <- c(1,cumsum(as.numeric(table(tissue_labels))))
+cumsum_low <- cumsum_val[1:(length(cumsum_val)-1)]
+cumsum_high <- cumsum_val[2:(length(cumsum_val))];
+cumsum_mean <- 0.5*(cumsum_low+cumsum_high)
+
+for(k in 1:20){
+png(paste0("../sfa_outputs/GTEX2013_transpose/sfa-figures/voom_sparse_fac_loadings/gtex_sfa_loadings_",k,".png"), width=4, height=4, units="in", res=600)
+par(mar=c(6,3,1,1))
+par(mar=c(10,3,2,2))
+barplot(t(f_out)[,k], axisnames=F,space=0,border=NA,
+        main=paste0("SFA on gtex expression: loading:", k),
+        las=1, cex.axis=0.3,cex.main=0.4,
+        ylim=c(min(f_out[k,]),max(f_out[k,])))
+axis(1,at=cumsum_mean,unique(tissue_labels),las=2, cex.axis=0.3);
+abline(v=cumsum_high)
+dev.off()
+}
+
+```
+
+
+### Factor 1 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[1,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",1,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 2 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[2,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",2,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 3 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[3,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",3,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 4 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[4,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",4,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 5 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[5,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",5,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 6 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[6,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",6,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 7 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[7,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",7,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 8 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[8,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",8,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 9 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[9,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",9,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 10 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[10,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",10,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 11 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[11,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",11,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 12 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[12,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",12,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 13 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[13,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",13,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 14 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[14,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",14,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 15 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[15,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",15,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 16 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[16,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",16,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 17 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[17,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",17,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 18 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[18,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",18,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 19 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[19,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",19,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+### Factor 20 Annotations
+
+```{r echo=TRUE, eval=TRUE}
+out <- mygene::queryMany(gene_list[20,],  scopes="ensembl.gene", fields=c("name", "summary", "symbol"), species="human");
+kable(as.data.frame(out))
+write.table(as.factor(out$query), paste0("../utilities/GTEX2013_sparse_fac_voom/gene_names_clus_",20,".txt"), col.names = FALSE,
+            row.names=FALSE, quote=FALSE);
+```
+
+

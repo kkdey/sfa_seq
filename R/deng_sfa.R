@@ -23,13 +23,13 @@ voom_deng_counts <- limma::voom(t(deng.counts));
 sqrt_deng_counts <- sqrt(t(deng.counts));
 
 write.table(t(deng.counts), file="../sfa_inputs/deng_counts", 
-            row.names=FALSE,col.names=FALSE, quote=FALSE)
+            row.names=FALSE,col.names=FALSE, quote=FALSE, sep="\t")
 
 write.table(voom_deng_counts, file="../sfa_inputs/voom_deng_counts", 
-            row.names=FALSE,col.names=FALSE, quote=FALSE)
+            row.names=FALSE,col.names=FALSE, quote=FALSE, sep="\t")
 
 write.table(sqrt_deng_counts, file="../sfa_inputs/sqrt_deng_counts", 
-            row.names=FALSE,col.names=FALSE, quote=FALSE)
+            row.names=FALSE,col.names=FALSE, quote=FALSE, sep="\t")
 
 ### Go to the sfa directory
 
@@ -42,7 +42,9 @@ write.table(sqrt_deng_counts, file="../sfa_inputs/sqrt_deng_counts",
 
 #./sfa_mac -gen ../../sfa_inputs/sqrt_deng_counts -g 22431 -n 259 -k 10 -iter 50 -r 800 -mn -mg -t  -o ../../sfa_outputs/Deng2014/sqrt_deng_counts_transpose
 
-# SFAmix
+# ./SFAmix --nf 10 --y ../sfa_inputs/sqrt_deng_counts  --out ../sfa_outputs/Deng2014SFAmix --sep tab
+
+
 lambda_out <- read.table("../sfa_outputs/Deng2014/sqrt_deng_counts_transpose_lambda.out")
 f_out <- read.table("../sfa_outputs/Deng2014/sqrt_deng_counts_transpose_F.out")
 
