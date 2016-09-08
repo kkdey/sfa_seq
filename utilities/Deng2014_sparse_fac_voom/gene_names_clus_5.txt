@@ -26,6 +26,7 @@ Znhit2-ps
 Gm13119
 Cml2
 Sesn2
+Crip2
 Eid2
 Usp17l5
 Obox3
@@ -107,4 +108,3 @@ Ttc30b
 Zfp775
 Lck
 Gm4858
-Mtap1b

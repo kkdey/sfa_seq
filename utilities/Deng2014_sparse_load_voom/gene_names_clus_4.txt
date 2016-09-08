@@ -18,6 +18,7 @@ Pcdh19
 Procr
 Gpc3
 Aoah
+Abcb1a
 4921530L18Rik
 Ydjc
 Gpr183
@@ -54,6 +55,7 @@ Engase
 Fam63b
 Dync1i1
 Fam40b
+Parp4
 Tia1
 Mterfd3
 Egln3
@@ -64,6 +66,7 @@ F3
 Rab13
 BC017643
 Dtx3
+Armc6
 Ttc30b
 Nmb
 Asphd1
@@ -74,10 +77,12 @@ Prr15l
 Abcg2
 1700086O06Rik
 1700086O06Rik
+Lonp2
 Pnck
 Mapkapk2
 Tmem106a
 Tex21
+Nbeal2
 Tdrkh
 Snx15
 Frmd4a
@@ -97,8 +102,3 @@ Gm15708
 Gm15708
 Hnf1b
 Recql4
-Rcn1
-Hesx1
-Entpd5
-Tcf23
-Cldn18

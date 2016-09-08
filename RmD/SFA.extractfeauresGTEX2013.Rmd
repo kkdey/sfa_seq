@@ -20,6 +20,7 @@ library(knitr)
 ```{r}
 library(knitr)
 source("../R/SFA.ExtractTopFeatures.R")
+source("../R/SFA.TopFeaturesPerFac.R")
 ```
 
 
@@ -36,7 +37,10 @@ gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.t
 gene_names <- substring(gene_names,1,15);
 xli  <-  gene_names;
 
-indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min", mult.annotate = TRUE)
+#indices_mat <- SFA.TopFeaturesPerFac(f_out, top_features = 100)
+
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100,
+                      options = "min",mult.annotate = TRUE)
 
 gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
 
@@ -266,7 +270,8 @@ gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.t
 gene_names <- substring(gene_names,1,15);
 xli  <-  gene_names;
 
-indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min", mult.annotate = TRUE)
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100,
+                      options = "min",mult.annotate = TRUE)
 
 gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
 
@@ -520,7 +525,9 @@ gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.t
 gene_names <- substring(gene_names,1,15);
 xli  <-  gene_names;
 
-indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min", mult.annotate = TRUE)
+
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options = "min",mult.annotate = TRUE)
+
 
 gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
 
@@ -750,7 +757,8 @@ gene_names <- as.vector(as.matrix(read.table("../sfa_inputs/gene_names_GTEX_V6.t
 gene_names <- substring(gene_names,1,15);
 xli  <-  gene_names;
 
-indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min", mult.annotate = TRUE)
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options = "min",mult.annotate = TRUE)
+
 
 gene_list <- do.call(rbind, lapply(1:dim(indices_mat)[1], function(x) gene_names[indices_mat[x,]]))
 

@@ -10,6 +10,7 @@ output:
 ```{r}
 library(knitr)
 source("../R/SFA.ExtractTopFeatures.R")
+source("../R/SFA.TopFeaturesPerFac.R")
 ```
 
 ## Loading Deng et al 2014 
@@ -38,7 +39,8 @@ deng.gene_names <- rownames(deng.counts)
 lambda_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_lambda.out")
 f_out <- t(read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_F.out"))
 
-indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min")
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100,
+                      options = "min",mult.annotate = TRUE)
 
 top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
 
@@ -143,7 +145,8 @@ write.table(as.factor(out$query), paste0("../utilities/Deng2014_sparse_load_sqrt
 lambda_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_lambda.out")
 f_out <- t(read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_F.out"))
 
-indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100, options="min")
+indices_mat <- SFA.ExtractTopFeatures(f_out, top_features = 100,
+                      options = "min",mult.annotate = TRUE)
 
 top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
 
@@ -247,7 +250,8 @@ write.table(as.factor(out$query), paste0("../utilities/Deng2014_sparse_load_voom
 lambda_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_transpose_lambda.out")
 f_out <- read.table("../sfa_outputs/Deng2014PPS/sqrt_deng_counts_transpose_F.out")
 
-indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min")
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options = "min",mult.annotate = TRUE)
+
 
 top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
 
@@ -351,7 +355,8 @@ write.table(as.factor(out$query), paste0("../utilities/Deng2014_sparse_fac_sqrt/
 lambda_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_transpose_lambda.out")
 f_out <- read.table("../sfa_outputs/Deng2014PPS/voom_deng_counts_transpose_F.out")
 
-indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options="min")
+indices_mat <- SFA.ExtractTopFeatures(lambda_out, top_features = 100, options = "min",mult.annotate = TRUE)
+
 
 top_gene_names <- t(apply(indices_mat, 1, function(x) return (deng.gene_names[x])));
 
